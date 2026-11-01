@@ -1,0 +1,3 @@
+VCD info: dumpfile wave.vcd opened for output.
+PASS spi_tx: 55 A5 00 FF 55, 8 rising edges per CS, MOSI stable while SCK high, SCK idle low, UART TX=HH lines
+sim/tb.sv:40: $finish called at 221750000 (1ps)

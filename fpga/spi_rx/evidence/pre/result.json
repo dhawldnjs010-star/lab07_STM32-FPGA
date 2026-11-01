@@ -1,0 +1,15 @@
+{
+  "status": "SIMULATED",
+  "run": "run-9d007e78d2194191a23dab518be4d83d",
+  "functional_correctness": "NOT_ASSESSED",
+  "inputs_sha256": {
+    "simulation.json": "6a571f23732804565501480cb75f8b80a5396e8695b9d0044ca95ccaf8310aab",
+    "src/uart.v": "6647119b17b1fd018db092c79cb33b3826aea910248329b76c86f08eed00a451",
+    "src/hex_line_tx.v": "6c4e124a689057b45a177d274e669de4d2a19e935662b028abc12e36bfb587bc",
+    "src/spi_slave_rx.v": "3467aa8348125fb05b05bb6f15671fd99b779768fea7773b7742d966dc90a8c1",
+    "src/spi_rx_top.v": "d308ee5a4bf7fcf5278140ccbe7fdc1e7aaa24c7afc72a6f0085560a81fb8f27",
+    "sim/tb.sv": "ebed8b2e9e5fcbf6366d78ae7546c45225be94a18cf85505e233fdb6645502aa",
+    "sim/loopback_tb.sv": "38a6c26b523aa1a8a6c43d31413e9405af971d9c87b121d26deba795706a5463"
+  },
+  "wave_sha256": "b462c05d953649bf38e470c0cce59380cf90f0f0d9a0f53a6e7bd526b5cff010"
+}

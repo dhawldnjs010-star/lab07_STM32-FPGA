@@ -1,0 +1,3 @@
+VCD info: dumpfile wave.vcd opened for output.
+PASS spi_rx: 55 A5 00 FF, partial byte dropped, 3C, UART RX=HH lines
+sim/tb.sv:48: $finish called at 139850000 (1ps)

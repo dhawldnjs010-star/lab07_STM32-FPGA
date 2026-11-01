@@ -1,0 +1,8 @@
+[SPI] DeInit mode=MASTER
+[SPI] Init mode=SLAVE nss=HARD_INPUT
+[GPIO] GPIOA pin=0x0010 mode=AF_PP pull=1 af=5
+RX=55
+RX=A5
+RX=00
+RX=FF
+RX timeout: check sender, SCK, MOSI, CS and GND

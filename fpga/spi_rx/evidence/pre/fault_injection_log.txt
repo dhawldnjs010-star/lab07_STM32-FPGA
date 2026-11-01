@@ -1,0 +1,3 @@
+FATAL: sim/tb.sv:36: LED 55 got ab
+       Time: 24450000  Scope: tb
+exit=1

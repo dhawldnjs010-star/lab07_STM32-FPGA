@@ -1,0 +1,2 @@
+spi_rx: top spi_rx_top, port bits 14, pins 14, mismatch [], duplicate []
+spi_tx: top spi_tx_top, port bits 15, pins 15, mismatch [], duplicate []

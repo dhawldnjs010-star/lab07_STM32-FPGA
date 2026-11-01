@@ -1,0 +1,8 @@
+byte 0: TX=55 RX=55
+byte 1: TX=a5 RX=a5
+byte 2: TX=00 RX=00
+byte 3: TX=ff RX=ff
+byte 4: TX=55 RX=55
+byte 5: TX=a5 RX=a5
+PASS loopback: FPGA spi_tx -> FPGA spi_rx, 6 bytes (55 A5 00 FF 55 A5), separate clocks
+sim/loopback_tb.sv:24: $finish called at 735121300 (1ps)

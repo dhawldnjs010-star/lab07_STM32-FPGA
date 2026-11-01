@@ -1,0 +1,20 @@
+[CS] t=1000 LOW
+[SPI TX] t=1000 cs=0 byte=0x55 bits(MSB first)=01010101
+[CS] t=1000 HIGH
+TX=55, result=0
+[CS] t=2000 LOW
+[SPI TX] t=2000 cs=0 byte=0xA5 bits(MSB first)=10100101
+[CS] t=2000 HIGH
+TX=A5, result=0
+[CS] t=3000 LOW
+[SPI TX] t=3000 cs=0 byte=0x00 bits(MSB first)=00000000
+[CS] t=3000 HIGH
+TX=00, result=0
+[CS] t=4000 LOW
+[SPI TX] t=4000 cs=0 byte=0xFF bits(MSB first)=11111111
+[CS] t=4000 HIGH
+TX=FF, result=0
+[CS] t=5000 LOW
+[SPI TX] t=5000 cs=0 byte=0x55 bits(MSB first)=01010101
+[CS] t=5000 HIGH
+TX=55, result=0

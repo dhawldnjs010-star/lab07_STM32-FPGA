@@ -15,6 +15,23 @@
 // static uint8_t uart2_rx_ece2;
 // static uint8_t uart3_rx_ece2;
 
+/* lab07 · STM32_3 SPI (Mode 0, 8비트, MSB 먼저) 역할 선택: 바꾸고 다시 빌드한다.
+ * STM32_3_ROLE 0 = 마스터·송신 (과제8 파형, 과제9 송신 측): 1초마다 한 바이트를 PB6(CS)·PB3(SCK)·PA7(MOSI)로 보낸다.
+ * STM32_3_ROLE 1 = 슬레이브·수신 (과제9 수신 측, 과제11 FPGA → MCU): SPI1을 슬레이브로 다시 설정하고 PA4를 NSS 입력으로 쓴다.
+ * 수신 결과와 송신 결과는 VCP(UART2, 9600)로 출력한다. MISO는 연결하지 않는다.
+ */
+#define STM32_3_ROLE      0
+/* 마스터가 보낼 값: 매뉴얼의 비교값 0x55, 0xA5, 0x00, 0xFF를 1초마다 차례로 보낸다.
+ * 한 값만 보내려면 TX_CYCLE을 0으로 두고 tx_values[0]을 바꾼다. */
+#define TX_CYCLE          1
+#if STM32_3_ROLE == 0
+static const uint8_t tx_values[] = {0x55U, 0xA5U, 0x00U, 0xFFU};
+#endif
+
+/* 수신 측 장치 선택 입력 (매뉴얼). 송신 측 PB6와 다른 핀이다. */
+#define SPI_NSS_RX_ece2_Pin       GPIO_PIN_4
+#define SPI_NSS_RX_ece2_GPIO_Port GPIOA
+
 /* 주변장치 초기화가 끝난 뒤, 메인 루프에 들어가기 전에 한 번 호출됩니다. */
 void ece2_474_init(void)
 {
@@ -46,12 +63,61 @@ void ece2_474_init(void)
     /* GPIO 입력 인터럽트는 이미 켜져 있어 별도 시작 호출이 필요 없습니다.
      * SPI·I2C와 UART 송신도 별도 시작 없이 필요한 시점에 송수신 함수를 호출합니다.
      */
+#if STM32_3_ROLE == 1
+    /* 수신 측만: SPI1을 슬레이브로 다시 초기화하고 PA4를 하드웨어 NSS 입력으로 설정한다 (매뉴얼 코드). */
+    if (HAL_SPI_DeInit(&hspi1) != HAL_OK)
+        Error_Handler();
+
+    hspi1.Init.Mode = SPI_MODE_SLAVE;
+    hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
+    if (HAL_SPI_Init(&hspi1) != HAL_OK)
+        Error_Handler();
+
+    GPIO_InitTypeDef gpio = {0};
+    gpio.Pin = SPI_NSS_RX_ece2_Pin;
+    gpio.Mode = GPIO_MODE_AF_PP;
+    gpio.Pull = GPIO_PULLUP;
+    gpio.Speed = GPIO_SPEED_FREQ_LOW;
+    gpio.Alternate = GPIO_AF5_SPI1;
+    HAL_GPIO_Init(SPI_NSS_RX_ece2_GPIO_Port, &gpio);
+#endif
 }
 
 /* 메인 루프에서 반복해서 호출됩니다. */
 void polling_routine(void)
 {
-    /* 실습 코드 작성 */
+#if STM32_3_ROLE == 0
+    static uint32_t last_ms = 0;
+    static uint32_t k = 0;
+    uint32_t now_ms = HAL_GetTick();
+    if (now_ms - last_ms < 1000U) return;      /* 1초마다 한 번 */
+    last_ms = now_ms;
+
+    uint8_t tx = TX_CYCLE ? tx_values[k] : tx_values[0];
+    k = (k + 1U) % (sizeof tx_values / sizeof tx_values[0]);
+    HAL_GPIO_WritePin(SPI_CS_ece2_GPIO_Port, SPI_CS_ece2_Pin, GPIO_PIN_RESET);   /* CS LOW */
+    HAL_StatusTypeDef result = HAL_SPI_Transmit(&hspi1, &tx, 1U, 100U);
+    HAL_GPIO_WritePin(SPI_CS_ece2_GPIO_Port, SPI_CS_ece2_Pin, GPIO_PIN_SET);     /* CS HIGH */
+
+    printf("TX=%02X, result=%d\r\n", (unsigned int)tx, (int)result);
+#elif STM32_3_ROLE == 1
+    uint8_t rx = 0;
+    HAL_StatusTypeDef result = HAL_SPI_Receive(&hspi1, &rx, 1U, 2000U);   /* 최대 2초 대기 */
+    if (result == HAL_OK)
+    {
+        printf("RX=%02X\r\n", (unsigned int)rx);
+    }
+    else if (result == HAL_TIMEOUT)
+    {
+        printf("RX timeout: check sender, SCK, MOSI, CS and GND\r\n");
+    }
+    else
+    {
+        printf("RX error=%d\r\n", (int)result);
+    }
+#else
+#error "STM32_3_ROLE는 0(마스터) 또는 1(슬레이브)"
+#endif
 }
 
 /* 1. 사용자 버튼 PC13을 눌렀을 때 호출됩니다. 우선순위: 7.
