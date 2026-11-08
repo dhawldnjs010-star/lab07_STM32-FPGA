@@ -10,11 +10,12 @@ LED 값은 LED1을 최상위 비트로 읽었다 (켜짐 = 1).
 |---|---|
 | `task8_scope_55.jpg`, `_A5`, `_00`, `_FF` | 과제8: CH1 SCK 781.3~781.6 kHz, CH2 MOSI. `_A5`, `_FF`는 CH2 측정값이 최대 0.2 V·최소 −3.3 V로 나온 사진 (본문 참고) |
 | `task8_serial.jpg` | 과제8: VCP 출력 `TX=55/A5/00/FF, result=0` 반복 |
-| `task9_mcu_to_mcu_demo.mp4`, `task9_frames.jpg` | 과제9: 옆 조 MCU(마스터) `TX=55/A5/00/FF, result=0`, 우리 MCU(ROLE 1, COM8) `RX=55/A5/00/FF` 같은 순서 |
+| `task9_mcu_to_mcu_demo.mp4`, `task9_frames.jpg` | 과제9: 송신 MCU(마스터) `TX=55/A5/00/FF, result=0`, 수신 MCU(ROLE 1, COM8) `RX=55/A5/00/FF` 같은 순서 |
 | `task10_mcu_to_fpga_demo.mp4`, `task10_serial.jpg`, `task10_fpga_led_frames.jpg`, `task10_probe_setup.jpg` | 과제10: COM8(MCU) `TX=…`와 COM9(FPGA) `RX=…`가 같은 순서, FPGA LED 55 → A5 → 00 → FF |
 | `task11_fpga_to_mcu_demo.mp4`, `task11_serial.jpg`, `task11_wiring.jpg` | 과제11: DIP_SW1 = 1(0x55 고정), COM9(FPGA) `TX=55`, COM8(MCU) `RX=55` |
 
-과제9는 우리 MCU가 수신하는 방향만 영상으로 남았다.
+과제9·12는 두 보드 모두 우리 조 장비로 진행해 역할 교대를 조교 승인 후 생략했다.
+과제11은 실험 때 네 값 순환도 확인했으나 영상은 0x55 고정 상태만 찍었다.
 
 ## FPGA (Combo II-DLD, Vivado 2026.1) · `fpga/`
 - `vivado_tcl_console_lab07.txt`: spi_rx·spi_tx 프로그래밍 기록 (11/02)
